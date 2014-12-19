@@ -1,0 +1,32 @@
+{
+  "name": "hubot-jira",
+  "description": "An updated version of the hubot jira script",
+  "version": "1.0.0",
+  "authors": [
+    "David Newell <beta@alumni.rice.edu>",
+    "stuartf"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "hubot",
+    "hubot-scripts",
+    "jira"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:rustedgrail/hubot-jira.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rustedgrail/hubot-jira/issues"
+  },
+  "dependencies": {
+    "coffee-script": "~1.6"
+  },
+  "main": "index.coffee",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

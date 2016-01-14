@@ -54,9 +54,13 @@ module.exports = (robot) ->
         msg.send "Getting transitions for #{issue}"
         robot.http(jiraUrl + "/rest/api/2/issue/#{issue}/transitions")
           .auth(auth).get() (err, res, body) ->
-            status = JSON.parse(body).transitions.filter (trans) ->
+            jsonBody = JSON.parse(body)
+            status = jsonBody.transitions.filter (trans) ->
               trans.name.toLowerCase() == msg.match[2].toLowerCase()
-
+            if status.length == 0
+              trans = jsonBody.transitions.map (trans) -> trans.name
+              msg.send "The only transitions of #{issue} are: #{trans.reduce (t, s) -> t + "," + s}"
+              return
             msg.send "Changing the status of #{issue} to #{status[0].name}"
             robot.http(jiraUrl + "/rest/api/2/issue/#{issue}/transitions")
               .header("Content-Type", "application/json").auth(auth).post(JSON.stringify({
@@ -74,6 +78,7 @@ module.exports = (robot) ->
 
       robot.hear jiraPattern, (msg) ->
         return if msg.message.user.name.match(new RegExp(jiraIgnoreUsers, "gi"))
+        return if msg.message.text.match(new RegExp(/move jira (.+) to (.+)/))
 
         for i in msg.match
           issue = i.toUpperCase()

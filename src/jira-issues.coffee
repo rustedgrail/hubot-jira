@@ -40,6 +40,14 @@ module.exports = (robot) ->
   robot.http(jiraUrl + "/rest/api/2/project")
     .auth(auth)
     .get() (err, res, body) ->
+      if err
+        errmsg = "Unable to initialize hubot-jira:\n    #{err}"
+        robot.logger.error errmsg
+        return
+      if res.statusCode != 200
+        errmsg = "Unable to initialize hubot-jira: #{res.statusCode}:#{res.statusMessage}"
+        robot.logger.error errmsg
+        return
       json = JSON.parse(body)
       jiraPrefixes = ( entry.key for entry in json )
       reducedPrefixes = jiraPrefixes.reduce (x,y) -> x + "-|" + y
